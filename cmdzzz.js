@@ -3,8 +3,6 @@
 /// TODO: have a visual slider hooked to top of page for visual clues and allow slider-like interface on that visual
 /// the slider will only show when keyboard shortcut is pressed and will hide soon after
 
-/// TODO: dont need to use localStorage, can just keep store in memory
-
 /// MARK: consts
 const LAST_N_FRAMES = 9; // and +1 because zero-indicies
 const WINDOW_FRAMES = 'windowFrames';
@@ -13,11 +11,12 @@ const MOVE_FORWARD_KEY = 39;
 const MOVE_BACKWARD_KEY = 37;
 
 /// MARK: global variables
+let frameStorage = [];
 let cycleIndex = -1;
 let shouldRecordScroll = true;
 
 function getStoredFrames() {
-	return JSON.parse(localStorage.getItem(WINDOW_FRAMES)) || [];
+	return frameStorage;
 }
 
 function cycleBackward() {
@@ -61,7 +60,7 @@ function recordWindowPosition() {
 
 	lastNframes.push( [ window.scrollX, window.scrollY ] );
 
-	localStorage.setItem(WINDOW_FRAMES, JSON.stringify(lastNframes));
+	frameStorage = lastNframes;
 
 	// update cycle index to latest recorded pos
 	cycleIndex = lastNframes.length - 1;
