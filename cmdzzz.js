@@ -11,8 +11,8 @@ const MOVE_FORWARD_KEY = 39;
 const MOVE_BACKWARD_KEY = 37;
 
 /// MARK: global variables
-var cycleIndex = -1;
-var shouldRecordScroll = true;
+let cycleIndex = -1;
+let shouldRecordScroll = true;
 
 function getStoredFrames() {
 	return JSON.parse(localStorage.getItem(WINDOW_FRAMES)) || [];
@@ -40,7 +40,7 @@ function cycleForward() {
 
 	shouldRecordScroll = false;
 
-	const pos	= storedFrames[++cycleIndex];
+	const pos = storedFrames[++cycleIndex];
 	window.scrollTo(pos[0], pos[1]);
 }
 
