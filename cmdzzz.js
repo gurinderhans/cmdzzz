@@ -9,11 +9,52 @@ const WINDOW_FRAMES = 'windowFrames';
 const RECORD_DELAY = 1000;
 const MOVE_FORWARD_KEY = 39;
 const MOVE_BACKWARD_KEY = 37;
+const stylesEl$ = `
+	<style type="text/css">
+		#visual-bar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 40px;
+			background: #333;
+			color: white;
+			display: table;
+			table-layout: fixed;
+		}
+		.frame {
+			display: table-cell;
+			text-align: center;
+			vertical-align: middle;
+		}
+	</style>
+`;
+
 
 /// MARK: global variables
 let frameStorage = [];
 let cycleIndex = -1;
 let shouldRecordScroll = true;
+
+function createFrameEl$(frame) {
+	const frame$ = document.createElement("div");
+				frame$.setAttribute("class", "frame");
+				frame$.textContent = `${frame[0]}, ${frame[1]}`;
+
+	return frame$;
+}
+
+function getVisualBar$() {
+	const visualBar$ = document.createElement("div");
+				visualBar$.setAttribute("id", "visualBar");
+
+	// add all frame storage
+	for (let frame of frameStorage) {
+		visualBar$.appendChild(createFrameEl$(frame));
+	}
+
+	return visualBar$;
+}
 
 function getStoredFrames() {
 	return frameStorage;
@@ -97,4 +138,9 @@ window.onscroll = delay(recordWindowPosition, RECORD_DELAY);
 
 window.onkeyup = handleKeyUp();
 
-window.onload = () => { recordWindowPosition() };
+window.onload = () => {
+	recordWindowPosition()
+
+	// add visual bar
+	document.body.appendChild(getVisualBar$());
+};
