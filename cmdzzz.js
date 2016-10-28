@@ -44,7 +44,7 @@ function cycleForward() {
 	window.scrollTo(pos[0], pos[1]);
 }
 
-function recordWindowPosition(newPosition) {
+function recordWindowPosition() {
 
 	if (!shouldRecordScroll) {
 		shouldRecordScroll = true;
@@ -57,7 +57,7 @@ function recordWindowPosition(newPosition) {
 		lastNframes = lastNframes.splice(lastNframes.length - LAST_N_FRAMES, lastNframes.length);
 	}
 
-	lastNframes.push(newPosition);
+	lastNframes.push( [ window.scrollX, window.scrollY ] );
 
 	localStorage.setItem(WINDOW_FRAMES, JSON.stringify(lastNframes));
 
@@ -78,11 +78,6 @@ function delay(func, delayAmount) {
 	}
 }
 
-function windowDidScroll() {
-	const scrollPosition = [window.scrollX, window.scrollY];
-	recordWindowPosition(scrollPosition);
-}
-
 function handleKeyUp() {
 	return (keyEvent) => {
 		if (keyEvent.keyCode == MOVE_BACKWARD_KEY) {
@@ -94,8 +89,8 @@ function handleKeyUp() {
 }
 
 // hook into window.onscroll to listen for scroll
-window.onscroll = delay(windowDidScroll, RECORD_DELAY);
+window.onscroll = delay(recordWindowPosition, RECORD_DELAY);
 
 window.onkeyup = handleKeyUp();
 
-window.onload = () => { windowDidScroll() };
+window.onload = () => { recordWindowPosition() };
