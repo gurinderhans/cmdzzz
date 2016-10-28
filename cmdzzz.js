@@ -21,7 +21,7 @@ function getStoredFrames() {
 function cycleBackward() {
 	const storedFrames = getStoredFrames();
 
-	if (cycleIndex - 1 < 0) {
+	if (cycleIndex < 1) {
 		return;
 	}
 
@@ -34,7 +34,7 @@ function cycleBackward() {
 function cycleForward() {
 	const storedFrames = getStoredFrames();
 
-	if (cycleIndex + 1 >= storedFrames.length) {
+	if (cycleIndex >= storedFrames.length - 1) {
 		return;
 	}
 
