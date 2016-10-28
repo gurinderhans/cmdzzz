@@ -3,6 +3,8 @@
 /// TODO: have a visual slider hooked to top of page for visual clues and allow slider-like interface on that visual
 /// the slider will only show when keyboard shortcut is pressed and will hide soon after
 
+/// TODO: dont need to use localStorage, can just keep store in memory
+
 /// MARK: consts
 const LAST_N_FRAMES = 9; // and +1 because zero-indicies
 const WINDOW_FRAMES = 'windowFrames';
