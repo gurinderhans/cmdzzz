@@ -53,7 +53,7 @@ function recordWindowPosition() {
 
 	let lastNframes = getStoredFrames();
 
-	if (lastNframes.length > 10) {
+	if (lastNframes.length > LAST_N_FRAMES) {
 		lastNframes = lastNframes.splice(lastNframes.length - LAST_N_FRAMES, lastNframes.length);
 	}
 
