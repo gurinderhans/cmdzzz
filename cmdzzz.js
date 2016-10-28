@@ -38,15 +38,15 @@ let shouldRecordScroll = true;
 
 function createFrameEl$(frame) {
 	const frame$ = document.createElement("div");
-				frame$.setAttribute("class", "frame");
-				frame$.textContent = `${frame[0]}, ${frame[1]}`;
+	frame$.setAttribute("class", "frame");
+	frame$.textContent = `${frame[0]}, ${frame[1]}`;
 
 	return frame$;
 }
 
 function getVisualBar$() {
 	const visualBar$ = document.createElement("div");
-				visualBar$.setAttribute("id", "visualBar");
+	visualBar$.setAttribute("id", "visualBar");
 
 	// add all frame storage
 	for (let frame of frameStorage) {
