@@ -47,6 +47,9 @@ function cycleForward() {
 
 function recordWindowPosition() {
 
+	// tab jumps are so fast, we need to record the position as soon as this function is called, we can save it after
+	const pos = [ window.scrollX, window.scrollY ];
+
 	if (!shouldRecordScroll) {
 		shouldRecordScroll = true;
 		return;
@@ -58,7 +61,7 @@ function recordWindowPosition() {
 		lastNframes = lastNframes.splice(lastNframes.length - LAST_N_FRAMES, lastNframes.length);
 	}
 
-	lastNframes.push( [ window.scrollX, window.scrollY ] );
+	lastNframes.push(pos);
 
 	frameStorage = lastNframes;
 
