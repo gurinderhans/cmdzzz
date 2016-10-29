@@ -9,25 +9,25 @@ const WINDOW_FRAMES = 'windowFrames';
 const RECORD_DELAY = 1000;
 const MOVE_FORWARD_KEY = 39;
 const MOVE_BACKWARD_KEY = 37;
-const stylesEl$ = `
-	<style type="text/css">
-		#visual-bar {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 40px;
-			background: #333;
-			color: white;
-			display: table;
-			table-layout: fixed;
-		}
-		.frame {
-			display: table-cell;
-			text-align: center;
-			vertical-align: middle;
-		}
-	</style>
+const VISUAL_BAR_ID = "visualBar";
+const STYLES = `
+	#visualBar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 40px;
+		background: #333;
+		color: white;
+		display: table;
+		table-layout: fixed;
+	}
+	#visualBar > .frame {
+		display: table-cell;
+		text-align: center;
+		vertical-align: middle;
+		cursor: pointer;
+	}
 `;
 
 
@@ -36,17 +36,38 @@ let frameStorage = [];
 let cycleIndex = -1;
 let shouldRecordScroll = true;
 
+
+function frameElClick(element) {
+	const posX = parseInt(element.target.getAttribute("data-posX"));
+	const posY = parseInt(element.target.getAttribute("data-posY"));
+
+	shouldRecordScroll = false;
+
+	window.scrollTo(posX, posY);
+}
+
+function createStyleEl$() {
+	const styleEl$ = document.createElement("style");
+	styleEl$.setAttribute("type", "text/css");
+	styleEl$.textContent = STYLES;
+
+	return styleEl$;
+}
+
 function createFrameEl$(frame) {
 	const frame$ = document.createElement("div");
 	frame$.setAttribute("class", "frame");
+	frame$.setAttribute("data-posX", frame[0]);
+	frame$.setAttribute("data-posY", frame[1]);
 	frame$.textContent = `${frame[0]}, ${frame[1]}`;
+	frame$.onclick = frameElClick;
 
 	return frame$;
 }
 
 function getVisualBar$() {
 	const visualBar$ = document.createElement("div");
-	visualBar$.setAttribute("id", "visualBar");
+	visualBar$.setAttribute("id", VISUAL_BAR_ID);
 
 	// add all frame storage
 	for (let frame of frameStorage) {
@@ -54,6 +75,22 @@ function getVisualBar$() {
 	}
 
 	return visualBar$;
+}
+
+function addVisualBar() {
+	document.body.appendChild(getVisualBar$());
+}
+
+function removeVisualBar() {
+	const visualBar = document.getElementById(VISUAL_BAR_ID);
+	if (visualBar) {
+		visualBar.parentNode.removeChild(visualBar);
+	}
+}
+
+function refreshVisualBar() {
+	removeVisualBar();
+	addVisualBar();
 }
 
 function getStoredFrames() {
@@ -139,8 +176,9 @@ window.onscroll = delay(recordWindowPosition, RECORD_DELAY);
 window.onkeyup = handleKeyUp();
 
 window.onload = () => {
-	recordWindowPosition()
+	// record window position initially
+	recordWindowPosition();
 
-	// add visual bar
-	document.body.appendChild(getVisualBar$());
+	// add styles on initial load because these are `const`
+	document.head.appendChild(createStyleEl$());
 };
